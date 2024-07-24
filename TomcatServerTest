@@ -25,11 +25,26 @@ public class TomcatServerTest {
         WebServer webServer = serverFactory.getWebServer(servletContext -> {
             servletContext.addServlet("hello", new HttpServlet() {
                 @Override
+                //인증, 보안, 다국어, 공통기능
                 protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//                    super.service(req, resp);
-                    resp.setStatus(200);
-                    resp.setHeader("Content-Type", "text/plain");
-                    resp.getWriter().println("Hello servlet");
+                    //super.service(req, resp);
+                    if(req.getRequestURI().equals("/hello") && req.getMethod().equals(HttpMethod.GET.name())) {
+                         String name = req.getParameter("name");
+
+                        //resp.setStatus(200);
+                        resp.setStatus(Https.OK.value());
+    
+                        //resp.setHeader("Content-Type", "text/plain");
+                        resp.setHeader(HttpHeaders.CONTENT_TYPE, MediaType.TEXT_PLAIN_VALUE);
+    
+                        resp.getWriter().println("Hello servlet" + name);
+                    }
+                    else if (req.getRequestURI().equals("/user")) {
+                        resp.setStatus(HttpStatus.NOT_FOUND.value());
+                    }
+                    else {
+                    }
+
                 }
             }).addMapping("/hello");
 
