@@ -40,13 +40,14 @@ public class TomcatServerTest {
                         resp.getWriter().println("Hello servlet" + name);
                     }
                     else if (req.getRequestURI().equals("/user")) {
-                        resp.setStatus(HttpStatus.NOT_FOUND.value());
+//
                     }
                     else {
+                        resp.setStatus(HttpStatus.NOT_FOUND.value());
                     }
 
                 }
-            }).addMapping("/hello");
+            }).addMapping("/*");
 
         });
         webServer.start();
